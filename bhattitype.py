@@ -1,4 +1,4 @@
-'''Library for making regular speak into Bhatti Type!
+'''Library for converting regular text into Bhatti Type!
 
 Resources:
 http://en.wikipedia.org/wiki/Wikipedia:Lists_of_common_misspellings
@@ -12,6 +12,7 @@ http://nltk.org/book/ch01.html
 '''
 
 import csv
+import random
 import sys
 
 
@@ -27,13 +28,16 @@ class BhattiType(object):
 			misspelling = line[0]
 			correct_spellings = line[1:]
 			for correct_spelling in correct_spellings:
-				self.misspellings[correct_spelling] = misspelling
+				if correct_spelling not in self.misspellings:
+					self.misspellings[correct_spelling] = []
+				self.misspellings[correct_spelling].append(misspelling)
 		fp.close()
 	
 	def _convert_token(self, input):
-		if input in self.misspellings:
-			return self.misspellings[input]
-		return input
+		if input not in self.misspellings:
+			return input
+		key = random.randint(0, len(self.misspellings[input])-1)
+		return self.misspellings[input][key]
 	
 	def convert(self, input):
 		return " ".join(map(self._convert_token, input.split()))
