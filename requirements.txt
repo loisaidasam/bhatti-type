@@ -1,3 +1,5 @@
 
-# Flask only required to run the API
+# required to run the API:
 Flask
+gunicorn
+
