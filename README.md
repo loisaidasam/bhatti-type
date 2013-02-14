@@ -11,6 +11,11 @@ Simple example:
     input: my name is bhatti and i know what i'm doing
     output: my nmae is bhatti andd i nkwo whta i'm donig
 
+To run webserver (complete with API):
+-------------------------------------
+    $ pip install -r requirements.txt
+    $ python webserver.py
+
 Resources:
 ----------
 -   http://en.wikipedia.org/wiki/Wikipedia:Lists_of_common_misspellings
