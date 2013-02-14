@@ -3,16 +3,17 @@
 Resources:
 http://en.wikipedia.org/wiki/Wikipedia:Lists_of_common_misspellings
 http://en.wikipedia.org/wiki/Wikipedia:Lists_of_common_misspellings/For_machines
-http://en.wikipedia.org/wiki/Wikipedia:Lists_of_common_misspellings/Grammar_and_Misc
 
+Other ideas:
+http://en.wikipedia.org/wiki/Wikipedia:Lists_of_common_misspellings/Grammar_and_Misc
 http://grammar.yourdictionary.com/spelling-and-word-lists/misspelled.html
 http://grammar.yourdictionary.com/spelling-and-word-lists/150more.html
-
 http://nltk.org/book/ch01.html
 '''
 
 import csv
 import random
+import string
 import sys
 
 
@@ -34,10 +35,26 @@ class BhattiType(object):
 		fp.close()
 	
 	def _convert_token(self, input):
-		if input not in self.misspellings:
+		before = ''
+		for c in input:
+			if c not in string.punctuation:
+				break
+			before += c
+		
+		after = ''
+		# string reversal (via http://stackoverflow.com/questions/931092/reverse-a-string-in-python)
+		for c in input[::-1]:
+			if c not in string.punctuation:
+				break
+			after = c + after
+		
+		meat = input[len(before):]
+		meat = meat[:(len(meat) - len(after))]
+		
+		if meat not in self.misspellings:
 			return input
-		key = random.randint(0, len(self.misspellings[input])-1)
-		return self.misspellings[input][key]
+		key = random.randint(0, len(self.misspellings[meat])-1)
+		return (before + self.misspellings[meat][key] + after)
 	
 	def convert(self, input):
 		return " ".join(map(self._convert_token, input.split()))
