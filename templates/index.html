@@ -1,21 +1,25 @@
 <!DOCTYPE html>
 <!-- saved from url=(0054)http://twitter.github.com/bootstrap/examples/hero.html -->
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<html lang="en">
+  <head>
+    <title>Bhatti Type</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
-    <title>Bootstrap, from Twitter</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
 
     <!-- Le styles -->
-    <link href="http://twitter.github.com/bootstrap/assets/css/bootstrap.css" rel="stylesheet">
+    <link href="/static/bootstrap.min.css" rel="stylesheet" type="text/css">
     <style type="text/css">
       body {
         padding-top: 60px;
         padding-bottom: 40px;
       }
+      #id_button {
+        display: block;
+      }
     </style>
-    <link href="http://twitter.github.com/bootstrap/assets/css/bootstrap-responsive.css" rel="stylesheet">
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -28,10 +32,11 @@
       <link rel="apple-touch-icon-precomposed" sizes="72x72" href="http://twitter.github.com/bootstrap/assets/ico/apple-touch-icon-72-precomposed.png">
                     <link rel="apple-touch-icon-precomposed" href="http://twitter.github.com/bootstrap/assets/ico/apple-touch-icon-57-precomposed.png">
                                    <link rel="shortcut icon" href="http://twitter.github.com/bootstrap/assets/ico/favicon.png">
-  <meta name="chromesniffer" id="chromesniffer_meta" content="{&quot;Bootstrap&quot;:-1,&quot;jQuery&quot;:&quot;1.9.1&quot;}"><script type="text/javascript" src="chrome-extension://homgcnaoacgigpkkljjjekpignblkeae/detector.js"></script></head>
+    <meta name="chromesniffer" id="chromesniffer_meta" content="{&quot;Bootstrap&quot;:-1,&quot;jQuery&quot;:&quot;1.9.1&quot;}"><script type="text/javascript" src="chrome-extension://homgcnaoacgigpkkljjjekpignblkeae/detector.js"></script>
+  </head>
 
   <body class=" hasGoogleVoiceExt">
-  	
+
   	<a href="https://github.com/loisaidasam/bhatti-type" target="_blank"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png" alt="Fork me on GitHub"></a>
 
     <div class="container">
@@ -39,8 +44,11 @@
       <!-- Main hero unit for a primary marketing message or call to action -->
       <div class="hero-unit">
         <h1>Bhatti Type!</h1>
-        <p>Enter your text below to give it a shot:</p>
-        <p><textarea id="id_input" rows="2" cols="50" class="span4"></textarea> <button id="id_button" class="btn btn-primary btn-medium">Convert!</button> <textarea id="id_output" rows="2" cols="50" class="span4"></textarea></p>
+        <p>Translate text into a mis-spelled mess, a.k.a. Bhatti Type.</p>
+        <textarea id="id_input" rows="4" cols="50" class="span4"></textarea>
+        &rarr;
+        <textarea id="id_output" rows="4" cols="50" class="span4"></textarea>
+        <button id="id_button" class="btn btn-primary btn-medium">Convert!</button>
       </div>
 
       <hr>
@@ -68,18 +76,27 @@
     <script src="/static/bootstrap-carousel.js"></script>
     <script src="/static/bootstrap-typeahead.js"></script>
     <script type="text/javascript">
-    	$('#id_button').click(function () {
-			$.ajax({
-				type: "POST",
-				url: "/api/",
-				data: { text: $('#id_input').val() },
-				success: function (data, textStatus, jqXHR) {
-					$('#id_output').val(data['output']);
-				},
-				dataType: "json",
-			});
-    	});
+      var onSubmit = function() {
+        $.ajax({
+          type: "POST",
+          url: "/api/",
+          data: { text: $('#id_input').val() },
+          success: function (data, textStatus, jqXHR) {
+            $('#id_output').val(data['output']);
+            $('#id_input').focus(function(){$(this).select()}).focus();
+          },
+          dataType: "json",
+        });
+      };
+
+    	$('#id_button').click(onSubmit);
+      $(window).keypress(function(event){
+        if (event.charCode !== 13) return;
+        event.preventDefault();
+        event.stopPropagation();
+        onSubmit();
+      });
     </script>
-  
+
 
 </body></html>
