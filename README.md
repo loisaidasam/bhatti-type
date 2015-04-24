@@ -13,7 +13,12 @@ Simple example:
 
 To run webserver (complete with API):
 -------------------------------------
+
     $ pip install -r requirements.txt
+    $ foreman start web
+
+or:
+
     $ python webserver.py test
 
 Resources:
