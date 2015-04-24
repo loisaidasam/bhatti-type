@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 
 import sys
 
@@ -12,7 +13,7 @@ from bhattitype import BhattiType
 HOST = 'localhost' # Local
 #HOST = '0.0.0.0' # World available
 PORT = 8052
-WORKERS = 4
+WORKERS = 1
 
 app = Flask(__name__)
 
