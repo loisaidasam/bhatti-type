@@ -80,9 +80,9 @@
         $.ajax({
           type: "POST",
           url: "/api/",
-          data: { text: $('#id_input').val() },
+          data: { q: $('#id_input').val() },
           success: function (data, textStatus, jqXHR) {
-            $('#id_output').val(data['output']);
+            $('#id_output').val(data['result']);
             $('#id_input').focus(function(){$(this).select()}).focus();
           },
           dataType: "json",

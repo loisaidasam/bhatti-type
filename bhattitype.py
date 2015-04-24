@@ -18,51 +18,48 @@ import sys
 
 
 class BhattiType(object):
-	def __init__(self):
-		self._setup_misspellings()
-	
-	def _setup_misspellings(self):
-		self.misspellings = {}
-		fp = open('misspellings.csv')
-		reader = csv.reader(fp)
-		for line in reader:
-			misspelling = line[0]
-			correct_spellings = line[1:]
-			for correct_spelling in correct_spellings:
-				if correct_spelling not in self.misspellings:
-					self.misspellings[correct_spelling] = []
-				self.misspellings[correct_spelling].append(misspelling)
-		fp.close()
-	
-	def _convert_token(self, input):
-		before = ''
-		for c in input:
-			if c not in string.punctuation:
-				break
-			before += c
-		
-		after = ''
-		# string reversal (via http://stackoverflow.com/questions/931092/reverse-a-string-in-python)
-		for c in input[::-1]:
-			if c not in string.punctuation:
-				break
-			after = c + after
-		
-		meat = input[len(before):]
-		meat = meat[:(len(meat) - len(after))]
-		
-		if meat not in self.misspellings:
-			return input
-		key = random.randint(0, len(self.misspellings[meat])-1)
-		return (before + self.misspellings[meat][key] + after)
-	
-	def convert(self, input):
-		return " ".join(map(self._convert_token, input.split()))
+    def __init__(self):
+        self._setup_misspellings()
+
+    def _setup_misspellings(self):
+        self.misspellings = {}
+        fp = open('misspellings.csv')
+        reader = csv.reader(fp)
+        for line in reader:
+            misspelling = line[0]
+            correct_spellings = line[1:]
+            for correct_spelling in correct_spellings:
+                if correct_spelling not in self.misspellings:
+                    self.misspellings[correct_spelling] = []
+                self.misspellings[correct_spelling].append(misspelling)
+        fp.close()
+
+    def _convert_token(self, input):
+        before = ''
+        for c in input:
+            if c not in string.punctuation:
+                break
+            before += c
+        after = ''
+        # string reversal (via http://stackoverflow.com/questions/931092/reverse-a-string-in-python)
+        for c in input[::-1]:
+            if c not in string.punctuation:
+                break
+            after = c + after
+        meat = input[len(before):]
+        meat = meat[:(len(meat) - len(after))]
+        if meat not in self.misspellings:
+            return input
+        key = random.randint(0, len(self.misspellings[meat])-1)
+        return (before + self.misspellings[meat][key] + after)
+
+    def convert(self, input):
+        return " ".join(map(self._convert_token, input.split()))
 
 
 if __name__ == "__main__":
-	input = " ".join(sys.argv[1:])
-	print "input: %s" % input
-	bt = BhattiType()
-	output = bt.convert(input)
-	print "output: %s" % output
+    q = " ".join(sys.argv[1:] or '')
+    print "q:", q
+    bt = BhattiType()
+    result = bt.convert(q)
+    print "result:", result

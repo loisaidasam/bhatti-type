@@ -27,8 +27,8 @@ def api():
     params = request.method == 'POST' and request.form or request.args
     q = params.get('q') or ''
     logger.info("q: %s", q)
-    output = bt.convert(q)
-    return jsonify({'status': 'OK', 'input': q, 'output': output})
+    result = bt.convert(q)
+    return jsonify({'status': 'OK', 'q': q, 'result': result})
 
 
 def main():
