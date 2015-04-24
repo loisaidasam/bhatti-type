@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import logging
 import os
 import sys
 
@@ -12,6 +13,7 @@ from bhattitype import BhattiType
 
 
 app = Flask(__name__)
+logger = logging.getLogger(__name__)
 
 
 @app.route("/")
@@ -22,21 +24,20 @@ def index():
 @app.route("/api/", methods=['GET', 'POST'])
 def api():
     bt = BhattiType()
-    if request.method == 'POST':
-        input = request.form.get('text', '')
-    else:
-        input = request.args.get('text', '')
-    output = bt.convert(input)
-    return jsonify({'status': 'OK', 'input': input, 'output': output})
+    params = request.method == 'POST' and request.form or request.args
+    q = params.get('q') or ''
+    logger.info("q: %s", q)
+    output = bt.convert(q)
+    return jsonify({'status': 'OK', 'input': q, 'output': output})
 
 
 def main():
     HOST = os.environ.get('HOST') or 'localhost'
     PORT = int(os.environ.get('PORT') or 8052)
     if len(sys.argv) >= 2 and sys.argv[1] == 'test':
-        print "Debug mode!"
+        logger.warning("Debug mode!")
         app.debug = True
-    print "Running at %s on port %s" % (HOST, PORT)
+    logger.info("Running at %s on port %s", HOST, PORT)
     app.run(host=HOST, port=PORT)
 
 
